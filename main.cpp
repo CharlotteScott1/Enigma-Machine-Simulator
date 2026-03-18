@@ -8,8 +8,8 @@ int rotorNotches[] = {16,4,21, 9, 25};
 string rotors[] = {"EKMFLGDQVZNTOWYHXUSPAIBRCJ", "AJDKSIRUXBLHWTMCQGZNPYFVOE", "BDFHJLCPRTXVZNYEIWGAKMUSQO", "ESOVPZJAYQUIRHXLNFTGKDCMWB", "VZBRGITYUPSDNHLXAWMJQOFECK"};
 int numOfRotors = size(rotors);
 
-string reflector = "YRUHQSLDPXNGOKMIEBFZCWVJAT";
-
+string reflectors[] = {"EJMZALYXVBWFCRQUONTSPIKHGD", "YRUHQSLDPXNGOKMIEBFZCWVJAT", "FVPJIAOYEDRZXWGCTKUQSBNMHL"};
+string reflector;
 char plugboard[] = {'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'};
 /**
  * Given the current rotor offsets, rotate the relevant rotors
@@ -38,6 +38,19 @@ void tick(int offsets[3], int positions[3]){
 
 }
 
+/**
+ * Check cin for input errors e.i. wrong type.
+ */
+bool isValidInput(){
+  if (cin.fail()) { 
+        cin.clear();             
+        cin.ignore(1000, '\n');  
+        cout << "Invalid input\n";
+
+        return false;
+  }
+  return true;
+}
 /** 
  * Configure rotor positions based on user input
  * Allows the user to select a rotor for each position and to enter its intial offset
@@ -46,32 +59,56 @@ void tick(int offsets[3], int positions[3]){
  * @param offsets array to populate with rotor offsets
  */
 void configure(int positions[3], int offsets[3]){
+  cout <<"Rotors:\n";
+  for (int i = 0; i < numOfRotors; i++){
+    cout <<  i +1 << ": " << rotors[i] << "\n";
+  }
+  cout <<"\nReflectors:\n";
+    for (int i = 0; i < 3; i++){
+    cout <<  i +1 << ": " << reflectors[i] << "\n";
+  }
+  cout <<"\n";
   int input;
   for (int i = 0; i < 3; i++){
     cout << "Select rotor [1 - "<< numOfRotors<< "] for position " << i << ": ";
     cin >> input;
-
-    if (input >= 1 && input <= numOfRotors){
+    if(isValidInput && input >= 1 && input <= numOfRotors){
       positions[i] = input -1;
+      
     }
     else{ i--;}
+     
   }
 
 
   for (int i = 0; i < 3; i++){
+    input = -1;
     cout << "Select offset [0 - 25] for position " << i << ": ";
     cin >> input;
 
-    if (input >= 0 && (int)input < 26){
+    if (isValidInput() && input >= 0 && input < 26){
       offsets[i] = input;
     }
     else{ i--;}
   }
+  input = -1;
+  while ( input <= 0 || input > 2){
+    cout << "Select reflector [1,2,3]: ";
+    cin >> input;
+    if(!isValidInput()){
+      input = -1;
+    }
+  
+  }
+  reflector = reflectors[input-1];
 
   input = -1;
   while (input != 1 && input != 0){
     cout << "Use plugboard? [0/1]: ";
     cin >> input;
+    if(!isValidInput()){
+      input = -1;
+    }
   }
   if(input == 1){
     char input1 = 'a';
@@ -84,20 +121,29 @@ void configure(int positions[3], int offsets[3]){
       while( input1 <'A' || input1 > 'Z' || plugboard[input1 - 'A'] != input1){
         cout << "Input first letter of pair "<< i<< ": ";
         cin >> input1;
-        input1 = toupper(input1);
-
-
-        if(input1 == '0'){
-          return;
+        if(isValidInput()){
+          input1 = toupper(input1);
+          if(input1 == '0'){
+            return;
+          }
+          cin.ignore(1000, '\n');
+        }
+        else{
+          input1 = '0';
         }
       }
       while(input2 <'A' || input2 > 'Z' || plugboard[input2 - 'A'] != input2){
         cout << "Input second letter of pair "<< i<< ": ";
         cin >> input2;
-        input2 = toupper(input2);
-
-        if(input2 == '0'){
-          return;
+        if(isValidInput()){
+          input2 = toupper(input2);
+          if(input2 == '0'){
+            return;
+          }
+          cin.ignore(1000, '\n');
+        }
+        else{
+          input2 = '0';
         }
       }
       plugboard[input1-'A'] = input2;
