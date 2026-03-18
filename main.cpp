@@ -4,7 +4,7 @@ using namespace std;
 
 
 
-int rotorNotches[] = {17,5,22, 10, 0};
+int rotorNotches[] = {16,4,21, 9, 25};
 string rotors[] = {"EKMFLGDQVZNTOWYHXUSPAIBRCJ", "AJDKSIRUXBLHWTMCQGZNPYFVOE", "BDFHJLCPRTXVZNYEIWGAKMUSQO", "ESOVPZJAYQUIRHXLNFTGKDCMWB", "VZBRGITYUPSDNHLXAWMJQOFECK"};
 int numOfRotors = size(rotors);
 
@@ -25,14 +25,14 @@ void tick(int offsets[3], int positions[3]){
   offsets[2] = (offsets[2] + 1) % 26;
 
 
-  if(rightAtNotch || middleAtNotch){
+  if(rightAtNotch){
     offsets[1]++;
-
-  }
-      
+  }    
   if(middleAtNotch){
     offsets[0]++;
+    offsets[1]++;
   }
+      
   offsets[0]  %= 26;
   offsets[1]  %= 26;
 
@@ -48,11 +48,11 @@ void tick(int offsets[3], int positions[3]){
 void configure(int positions[3], int offsets[3]){
   int input;
   for (int i = 0; i < 3; i++){
-    cout << "Select rotor [1 - "<< numOfRotors +1<< "] for position " << i << ": ";
+    cout << "Select rotor [1 - "<< numOfRotors<< "] for position " << i << ": ";
     cin >> input;
 
-    if (input >= 1 && input <= numOfRotors+1){
-      positions[i] = input;
+    if (input >= 1 && input <= numOfRotors){
+      positions[i] = input -1;
     }
     else{ i--;}
   }
@@ -133,12 +133,13 @@ int main()
         input = reflector[(input - 'A')];
 
         //Pass letter through rotors in reverse:
-        input = char(((rotors[rotorPos[0]].find(char(((input - 'A' + offsets[0])%26) + 'A')) + 26 - offsets[0])%26)+'A');
-        input = char(((rotors[rotorPos[1]].find(char(((input - 'A' + offsets[1])%26) + 'A')) + 26 - offsets[1])%26)+'A');
-        input = char(((rotors[rotorPos[2]].find(char(((input - 'A' + offsets[2])%26) + 'A')) + 26 - offsets[2])%26)+'A');
+        input = char(((rotors[rotorPos[0]].find(char(((input - 'A' + offsets[0] + 26)%26) + 'A')) + 26 - offsets[0])%26)+'A');
+        input = char(((rotors[rotorPos[1]].find(char(((input - 'A' + offsets[1] + 26)%26) + 'A')) + 26 - offsets[1])%26)+'A');
+        input = char(((rotors[rotorPos[2]].find(char(((input - 'A' + offsets[2] + 26)%26) + 'A')) + 26 - offsets[2])%26)+'A');
         
         input = plugboard[input-'A'];
         cout << input;
+        //cout << "\n" << offsets[1] << ", "<< offsets[2] << "\n";
       }
       else{
         break;
