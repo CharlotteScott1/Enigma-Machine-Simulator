@@ -7,7 +7,7 @@ Allows user to select rotor ordering, starting position and reflector as well as
 - Rotor choices 1 to 3 are based on the standard enigma machine from 1930s and rotors 4 and 5 from 1938 army version of the enigma machine.  
 - The machine takes 3 rotors at a time in any order (allowing duplicates even though this is not entirely traditional).  
 - The three rotors can be initialised in any one of their 26 positions.  
-- The plug board allows up to 10 "steckered pairs".
+- The plugboard allows up to 10 "steckered pairs".
 
 
 ## Rotors
